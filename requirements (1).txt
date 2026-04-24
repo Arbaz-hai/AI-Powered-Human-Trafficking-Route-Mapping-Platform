@@ -1,0 +1,12 @@
+gradio==6.13.0
+
+torch==2.5.1
+transformers==4.45.2
+
+numpy==2.2.2
+pandas==2.2.3
+
+scikit-learn==1.5.1
+networkx==3.3
+
+spaces
