@@ -1,0 +1,62 @@
+[
+  {
+    "text": "New worker just arrived in Delhi from village. Handler manages phone, cash only, no police, room included.",
+    "label": "TRAFFICKING",
+    "source_type": "classified_style_ad",
+    "entities": [
+      {"text": "Delhi", "type": "LOCATION"},
+      {"text": "handler", "type": "CONTROL_INDICATOR"},
+      {"text": "cash only", "type": "TRANSACTION_INDICATOR"},
+      {"text": "no police", "type": "SECRECY_INDICATOR"}
+    ],
+    "relations": [
+      {"source": "village origin", "relation": "possible_route_to", "target": "Delhi"},
+      {"source": "Delhi", "relation": "linked_to_control", "target": "handler"},
+      {"source": "handler", "relation": "controls_transaction_signal", "target": "cash only"}
+    ]
+  },
+  {
+    "text": "Public awareness workshop in Mumbai about online safety and trafficking prevention helplines.",
+    "label": "BENIGN",
+    "source_type": "public_awareness_text",
+    "entities": [
+      {"text": "Mumbai", "type": "LOCATION"},
+      {"text": "workshop", "type": "PUBLIC_CONTEXT"}
+    ],
+    "relations": [
+      {"source": "Mumbai", "relation": "hosts_public_awareness", "target": "workshop"}
+    ]
+  },
+  {
+    "text": "Phone record summary mentions movement from Patna to Delhi, handler-managed calls, no papers, and cash only travel support.",
+    "label": "TRAFFICKING",
+    "source_type": "phone_record_style_transcript",
+    "entities": [
+      {"text": "Patna", "type": "LOCATION"},
+      {"text": "Delhi", "type": "LOCATION"},
+      {"text": "handler-managed calls", "type": "CONTROL_INDICATOR"},
+      {"text": "no papers", "type": "ISOLATION_INDICATOR"}
+    ],
+    "relations": [
+      {"source": "Patna", "relation": "possible_route_to", "target": "Delhi"},
+      {"source": "Delhi", "relation": "linked_to_control", "target": "handler-managed calls"},
+      {"source": "Delhi", "relation": "linked_to_vulnerability_signal", "target": "no papers"}
+    ]
+  },
+  {
+    "text": "Dark web style listing references fresh girl in Jaipur, private entry, manager handles meeting, leaving tomorrow.",
+    "label": "TRAFFICKING",
+    "source_type": "dark_web_style_listing",
+    "entities": [
+      {"text": "Jaipur", "type": "LOCATION"},
+      {"text": "manager handles", "type": "CONTROL_INDICATOR"},
+      {"text": "private entry", "type": "SECRECY_INDICATOR"},
+      {"text": "leaving tomorrow", "type": "MOVEMENT_INDICATOR"}
+    ],
+    "relations": [
+      {"source": "Jaipur", "relation": "linked_to_control", "target": "manager handles"},
+      {"source": "Jaipur", "relation": "linked_to_movement", "target": "leaving tomorrow"},
+      {"source": "Jaipur", "relation": "linked_to_vulnerability_signal", "target": "private entry"}
+    ]
+  }
+]
