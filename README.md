@@ -12,14 +12,18 @@ The application helps transform unstructured public text into structured risk in
 
 The system works immediately with a transparent indicator-based scoring model. It also includes an optional open-source fine-tuning pipeline using `distilroberta-base` for teams that want to train a custom classifier on labeled data.
 
+The project is designed around an NLP pipeline for analyzing high-risk public text sources, including classified-style ads, dark web style listings, and phone-record style transcripts. It uses named entity recognition and relationship-style extraction to connect locations, movement indicators, handlers, and risk phrases into mapped route intelligence. The repository also includes a domain-specific annotated dataset format that can be expanded for fine-tuning transformer models.
+
 ## Key Features
 
 - Clean white professional dashboard interface
 - Single text risk analysis
 - Batch scanning for TXT, CSV, and JSON files
 - Public webpage text extraction and analysis
+- NLP pipeline for classified-style ads, dark web style text, and phone-record style transcripts
 - Risk score, risk level, flag count, and city detection
 - Entity extraction for cities, phone numbers, and names when spaCy is available
+- Relationship-style extraction between locations, handlers, movement phrases, and risk indicators
 - Interactive Leaflet hotspot map
 - Heatmap and city marker overlays
 - Demo map loader with 20 sample records
@@ -54,6 +58,7 @@ static/
 training_data/
   sample_train.csv
   demo_map_records.csv
+  annotated_domain_dataset.json
 docs/
   result-webpage.png
 models/
@@ -72,6 +77,46 @@ The default scoring engine is a transparent indicator model. It evaluates text u
 - Secrecy or avoidance language
 
 If a fine-tuned model is available in `models/trafficking-roberta`, the application automatically loads it and combines transformer inference with the indicator model.
+
+## NLP Pipeline
+
+The backend converts raw text into structured intelligence through the following stages:
+
+```text
+Text ingestion
+Text cleaning
+Risk indicator detection
+Named entity extraction
+Location extraction
+Relationship-style linking
+Risk scoring
+Hotspot map generation
+```
+
+The relationship-style extraction connects detected entities and risk phrases to support route mapping. For example, when a record contains a city, movement phrase, and control indicator, the system uses those signals to update the geographic hotspot layer.
+
+## Annotated Dataset Format
+
+The project includes a simple domain-specific annotation format for transformer fine-tuning:
+
+```text
+text,label
+```
+
+Example labels:
+
+```text
+BENIGN
+TRAFFICKING
+```
+
+The included sample files can be expanded with additional annotated records from authorized, lawful, and consented sources.
+
+The repository also includes an example annotation file with source type, entities, labels, and relation annotations:
+
+```text
+training_data/annotated_domain_dataset.json
+```
 
 ## Installation
 
