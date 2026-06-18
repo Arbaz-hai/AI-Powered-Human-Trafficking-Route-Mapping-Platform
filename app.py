@@ -246,6 +246,103 @@ def extract_persons(text):
         return []
 
 
+def extract_relations(text, cities, phones, flags):
+    relations = []
+    lower = (text or "").lower()
+    movement_terms = flags.get("movement", [])
+    control_terms = flags.get("control", [])
+    isolation_terms = flags.get("isolation", [])
+    transaction_terms = flags.get("transaction", [])
+    secrecy_terms = flags.get("secrecy", [])
+
+    if len(cities) >= 2:
+        ordered_cities = sorted(cities, key=lambda city: lower.find(city.lower()) if city.lower() in lower else 9999)
+        for source, target in zip(ordered_cities, ordered_cities[1:]):
+            if source in CITY_COORDS and target in CITY_COORDS:
+                relations.append(
+                    {
+                        "source": source,
+                        "relation": "possible_route_to",
+                        "target": target,
+                        "evidence": "multi-location sequence",
+                    }
+                )
+
+    for city in cities:
+        if city not in CITY_COORDS:
+            continue
+        for term in movement_terms:
+            relations.append(
+                {
+                    "source": city,
+                    "relation": "linked_to_movement",
+                    "target": term,
+                    "evidence": term,
+                }
+            )
+        for term in control_terms:
+            relations.append(
+                {
+                    "source": city,
+                    "relation": "linked_to_control",
+                    "target": term,
+                    "evidence": term,
+                }
+            )
+        if "village" in lower:
+            relations.append(
+                {
+                    "source": "village origin",
+                    "relation": "possible_route_to",
+                    "target": city,
+                    "evidence": "village",
+                }
+            )
+
+    for phone in phones:
+        for term in control_terms:
+            relations.append(
+                {
+                    "source": phone,
+                    "relation": "possibly_managed_by",
+                    "target": term,
+                    "evidence": term,
+                }
+            )
+
+    for term in transaction_terms:
+        for control in control_terms:
+            relations.append(
+                {
+                    "source": control,
+                    "relation": "controls_transaction_signal",
+                    "target": term,
+                    "evidence": term,
+                }
+            )
+
+    for term in secrecy_terms + isolation_terms:
+        for city in cities:
+            if city in CITY_COORDS:
+                relations.append(
+                    {
+                        "source": city,
+                        "relation": "linked_to_vulnerability_signal",
+                        "target": term,
+                        "evidence": term,
+                    }
+                )
+
+    unique = []
+    seen = set()
+    for item in relations:
+        key = (item["source"], item["relation"], item["target"])
+        if key not in seen:
+            seen.add(key)
+            unique.append(item)
+    return unique[:12]
+
+
 def detect_risk_flags(text):
     lower = (text or "").lower()
     return {
@@ -324,6 +421,7 @@ def analyze_record(text, threshold=0.5):
     cities = extract_cities(text)
     persons = extract_persons(text)
     phones = extract_phones(text)
+    relations = extract_relations(text, cities, phones, flags)
     flag_count = sum(len(items) for items in flags.values())
 
     for city in cities:
@@ -344,6 +442,7 @@ def analyze_record(text, threshold=0.5):
         "phones": phones,
         "cities": cities,
         "persons": persons,
+        "relations": relations,
     }
 
 
