@@ -351,6 +351,28 @@ input[type="file"] {
   font-weight: 700;
 }
 
+.relation-list {
+  display: grid;
+  gap: 10px;
+}
+
+.relation-item {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f9fbfd;
+  font-size: 12px;
+}
+
+.relation-item span {
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 .map-shell {
   position: relative;
 }
