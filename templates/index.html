@@ -35,7 +35,7 @@
         <div class="section-head">
           <div>
             <h2>Analyze text</h2>
-            <p>Paste a public record, post, classified text, or investigation note.</p>
+            <p>Paste a public record, classified-style ad, dark web style listing, or phone-record style transcript.</p>
           </div>
           <button class="ghost-button" id="loadDemo">Load sample</button>
         </div>
@@ -53,7 +53,7 @@
         <div class="section-head">
           <div>
             <h2>Batch scan</h2>
-            <p>Upload TXT, CSV, or JSON files, or paste one record per line.</p>
+            <p>Upload TXT, CSV, or JSON files containing ads, web listings, or transcript-style records.</p>
           </div>
         </div>
         <textarea id="batchText" rows="8" placeholder="Paste one record per line"></textarea>
@@ -130,6 +130,11 @@
       <div class="result-card">
         <h2>Detected entities</h2>
         <div id="entityOutput" class="chip-list"></div>
+      </div>
+
+      <div class="result-card">
+        <h2>Extracted relations</h2>
+        <div id="relationOutput" class="relation-list empty-state">Run an analysis to see extracted links.</div>
       </div>
     </aside>
   </main>
