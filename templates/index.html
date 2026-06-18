@@ -1,1 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Counter Trafficking Intelligence Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Public intelligence analysis</p>
+      <h1>Counter Trafficking Risk Dashboard</h1>
+    </div>
+    <div class="model-status">
+      <span class="status-dot"></span>
+      <span>{% if model_loaded %}{{ model_name }} loaded{% else %}Open indicator model active{% endif %}</span>
+    </div>
+  </header>
 
+  <main class="shell">
+    <section class="workspace">
+      <nav class="tabs" aria-label="Analysis modes">
+        <button class="tab is-active" data-tab="single">Text Analysis</button>
+        <button class="tab" data-tab="batch">Batch Scan</button>
+        <button class="tab" data-tab="scrape">Public Web Scrape</button>
+        <button class="tab" data-tab="map">Hotspot Map</button>
+      </nav>
+
+      <section class="panel is-active" id="single">
+        <div class="section-head">
+          <div>
+            <h2>Analyze text</h2>
+            <p>Paste a public record, post, classified text, or investigation note.</p>
+          </div>
+          <button class="ghost-button" id="loadDemo">Load sample</button>
+        </div>
+        <textarea id="singleText" rows="9" placeholder="Paste text for analysis">{{ demo_text }}</textarea>
+        <div class="form-row">
+          <label>
+            Risk threshold
+            <input id="singleThreshold" type="range" min="0.3" max="0.95" step="0.05" value="0.5">
+          </label>
+          <button class="primary-button" id="analyzeText">Analyze</button>
+        </div>
+      </section>
+
+      <section class="panel" id="batch">
+        <div class="section-head">
+          <div>
+            <h2>Batch scan</h2>
+            <p>Upload TXT, CSV, or JSON files, or paste one record per line.</p>
+          </div>
+        </div>
+        <textarea id="batchText" rows="8" placeholder="Paste one record per line"></textarea>
+        <div class="upload-row">
+          <input id="batchFile" type="file" accept=".txt,.csv,.json">
+          <label>
+            Risk threshold
+            <input id="batchThreshold" type="range" min="0.3" max="0.95" step="0.05" value="0.5">
+          </label>
+          <button class="primary-button" id="runBatch">Run batch</button>
+        </div>
+      </section>
+
+      <section class="panel" id="scrape">
+        <div class="section-head">
+          <div>
+            <h2>Public web scrape</h2>
+            <p>Enter public URLs only. The app extracts visible page text and analyzes it locally.</p>
+          </div>
+        </div>
+        <textarea id="scrapeUrls" rows="7" placeholder="https://example.org/public-page"></textarea>
+        <div class="form-row">
+          <label>
+            Risk threshold
+            <input id="scrapeThreshold" type="range" min="0.3" max="0.95" step="0.05" value="0.5">
+          </label>
+          <button class="primary-button" id="runScrape">Fetch and analyze</button>
+        </div>
+      </section>
+
+      <section class="panel" id="map">
+        <div class="section-head">
+          <div>
+            <h2>Geographic hotspot map</h2>
+            <p>Map points are built from flagged analyses in this session.</p>
+          </div>
+          <div class="button-group">
+            <button class="ghost-button" id="loadMapDemo">Load demo data</button>
+            <button class="ghost-button" id="resetMap">Reset map</button>
+          </div>
+        </div>
+        <div class="map-shell">
+          <div id="mapCanvas"></div>
+          <div id="mapNotice" class="map-notice">Run an analysis with a detected city to populate the map.</div>
+        </div>
+      </section>
+    </section>
+
+    <aside class="insights">
+      <div class="metric-grid">
+        <div class="metric">
+          <span>Risk score</span>
+          <strong id="riskScore">0%</strong>
+        </div>
+        <div class="metric">
+          <span>Risk level</span>
+          <strong id="riskLevel">Waiting</strong>
+        </div>
+        <div class="metric">
+          <span>Flags</span>
+          <strong id="flagCount">0</strong>
+        </div>
+        <div class="metric">
+          <span>Cities</span>
+          <strong id="cityCount">0</strong>
+        </div>
+      </div>
+
+      <div class="result-card">
+        <h2>Analysis result</h2>
+        <div id="resultOutput" class="empty-state">Run an analysis to see model output.</div>
+      </div>
+
+      <div class="result-card">
+        <h2>Detected entities</h2>
+        <div id="entityOutput" class="chip-list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <section class="table-section">
+    <div class="section-head">
+      <div>
+        <h2>Records</h2>
+        <p>Latest batch and web scrape results appear here.</p>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Risk</th>
+            <th>Level</th>
+            <th>Cities</th>
+            <th>Flags</th>
+            <th>Preview</th>
+          </tr>
+        </thead>
+        <tbody id="recordsTable">
+          <tr><td colspan="6" class="empty-table">No records analyzed yet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <span>Use only with lawful, authorized, public, or consented data.</span>
+    <span>Predictions are decision support, not evidence by themselves.</span>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
