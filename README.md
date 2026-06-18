@@ -8,7 +8,7 @@ Counter Trafficking Risk Dashboard is a Flask-based intelligence prototype for a
 
 ## Project Value
 
-This project is designed as an interview-ready applied AI system, not just a basic classifier. It demonstrates full-stack implementation, NLP reasoning, public web text extraction, risk scoring, entity extraction, batch processing, and geospatial visualization in one workflow.
+This project is designed as an industry-ready applied AI system, not just a basic classifier. It demonstrates full-stack implementation, NLP reasoning, public web text extraction, risk scoring, entity extraction, batch processing, and geospatial visualization in one workflow.
 
 The strongest value is that the system remains usable before fine-tuning. It includes a transparent indicator-based scoring model for immediate demonstrations, while also supporting future fine-tuning with an open-source transformer model.
 
