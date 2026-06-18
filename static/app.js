@@ -12,6 +12,7 @@ const flagCount = document.getElementById("flagCount");
 const cityCount = document.getElementById("cityCount");
 const resultOutput = document.getElementById("resultOutput");
 const entityOutput = document.getElementById("entityOutput");
+const relationOutput = document.getElementById("relationOutput");
 const recordsTable = document.getElementById("recordsTable");
 
 document.querySelectorAll(".tab").forEach((button) => {
@@ -153,6 +154,7 @@ function renderSingle(result) {
     <p style="margin:8px 0 0">Method: ${escapeHtml(result.method || "indicator model")}</p>
   `;
   renderEntities(result);
+  renderRelations(result.relations || []);
 }
 
 function renderSummary(summary, errors = []) {
@@ -173,6 +175,7 @@ function renderSummary(summary, errors = []) {
     ${errorText}
   `;
   entityOutput.innerHTML = "";
+  relationOutput.innerHTML = "";
 }
 
 function renderEntities(result) {
@@ -185,6 +188,21 @@ function renderEntities(result) {
   entityOutput.innerHTML = chips.length
     ? chips.map(([label, value]) => `<span class="chip">${escapeHtml(label)}: ${escapeHtml(value)}</span>`).join("")
     : `<span class="empty-state">No entities detected.</span>`;
+}
+
+function renderRelations(relations) {
+  if (!relations.length) {
+    relationOutput.innerHTML = `<span class="empty-state">No relations extracted.</span>`;
+    return;
+  }
+
+  relationOutput.innerHTML = relations.map((item) => `
+    <div class="relation-item">
+      <strong>${escapeHtml(item.source)}</strong>
+      <span>${escapeHtml(item.relation.replaceAll("_", " "))}</span>
+      <strong>${escapeHtml(item.target)}</strong>
+    </div>
+  `).join("");
 }
 
 function renderTable(results) {
