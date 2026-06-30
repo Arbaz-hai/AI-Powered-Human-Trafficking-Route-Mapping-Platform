@@ -12,7 +12,7 @@ The application helps transform unstructured public text into structured risk in
 
 The system works immediately with a transparent indicator-based scoring model. It also includes an optional open-source fine-tuning pipeline using `distilroberta-base` for teams that want to train a custom classifier on labeled data.
 
-The project is designed around an NLP pipeline for analyzing high-risk public text sources, including classified-style ads, dark web style listings, and phone-record style transcripts. It uses named entity recognition and relationship-style extraction to connect locations, movement indicators, handlers, and risk phrases into mapped route intelligence. The repository also includes a domain-specific annotated dataset format that can be expanded for fine-tuning transformer models.
+The project is designed around an NLP pipeline for analyzing high-risks public text sources, including classified-style ads, dark web style listings, and phone-record style transcripts. It uses named entity recognition and relationship-style extraction to connect locations, movement indicators, handlers, and risk phrases into mapped route intelligence. The repository also includes a domain-specific annotated dataset format that can be expanded for fine-tuning transformer models.
 
 ## Key Features
 
