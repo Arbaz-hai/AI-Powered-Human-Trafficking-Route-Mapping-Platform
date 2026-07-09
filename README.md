@@ -29,7 +29,6 @@ The project is designed around an NLP pipeline for analyzing high-risks public t
 - Demo map loader with 20 sample records
 - Optional DistilRoBERTa fine-tuning pipeline
 - Flask JSON API backend
-- No pickle model dependency
 
 ## Technology Stack
 
